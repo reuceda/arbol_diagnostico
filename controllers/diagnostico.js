@@ -1,5 +1,5 @@
 
-const env = "https://4d782cd7501001.lhr.life";
+const url = "http://localhost:8080/api/arbol_desicion/";
 
 init();
 
@@ -20,7 +20,7 @@ let sii; //bandera para saber si viene de un si o de un no, se necesita para cua
 
 async function cargarpreguntas() {
     try {
-        const response = await fetch(`${env}/api/arbol_desicion/`, {
+        const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -38,11 +38,11 @@ async function cargarpreguntas() {
             console.log('Árbol cargado:', arbolb);  // Verifica si el árbol se ha cargado correctamente
 
         } else {
-            alert('Error al cargar los nodos: '+error);
+            alert('Error al cargar los nodos: ' + error);
         }
     } catch (error) {
         console.error('Error al cargar los nodos try:', error);
-        alert('Hubo un error'+error);
+        alert('Hubo un error' + error);
     }
 }
 
@@ -85,9 +85,8 @@ document.getElementById("boton-si").addEventListener("click", function () {
         if (document.getElementById("pregunta-actual").textContent == 'Desea emitir un diagnóstico?') {
             const modal = new bootstrap.Modal(document.getElementById('modalCrearDiagnostico'));
             modal.show();
-        }else{
+        } else {
             document.getElementById("pregunta-actual").textContent = 'Desea emitir un diagnóstico?';
-
         }
 
     }
@@ -101,7 +100,7 @@ document.getElementById("boton-no").addEventListener("click", function () {
     } else {
         if (document.getElementById("pregunta-actual").textContent == 'Es correcto el diagnóstico?') {
             document.getElementById("pregunta-actual").textContent = 'Desea cambiar el diagnóstico?';
-        }else{
+        } else {
             const modal = new bootstrap.Modal(document.getElementById('modalCrearPregunta'));
             modal.show();
         }
@@ -113,7 +112,8 @@ document.getElementById("creardiagnostico").addEventListener("click", async func
 
     try {
         if (document.getElementById("pregunta-actual").textContent == 'Desea cambiar el diagnóstico?') {
-            const response = await fetch(`http://localhost:8080/api/arbol_desicion/${arbolb.nodoActual.id}`, {
+            alert('crear diagnóstico');
+            const response = await fetch(`${url}${arbolb.nodoActual.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -122,15 +122,16 @@ document.getElementById("creardiagnostico").addEventListener("click", async func
                     pregunta: document.getElementById("diagnostico").value,
                 }),
             });
-
+            alert(`${url}${arbolb.nodoActual.id}`);
             //const data = await response.json();
             if (response.ok) {
                 alert('El diagnóstico se ha modificado.')
+                return;
             } else {
                 alert('Error al modificar el diagnóstico.');
             }
         } else {
-            const response = await fetch('http://localhost:8080/api/arbol_desicion/', {
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -146,6 +147,8 @@ document.getElementById("creardiagnostico").addEventListener("click", async func
             //const data = await response.json();
             if (response.ok) {
                 alert('El diagnóstico se ha creado.')
+                const modal = new bootstrap.Modal(document.getElementById('modalCrearDiagnostico'));
+                modal.hide();
             } else {
                 alert('Error al guardar la pregunta nueva.');
             }
@@ -165,7 +168,7 @@ document.getElementById("crearpregunta").addEventListener("click", async functio
     if (document.getElementById("pregunta-actual").textContent == 'Desea cambiar el diagnóstico?') {
 
         try {
-            const response = await fetch(`http://localhost:8080/api/arbol_desicion/${arbolb.nodoActual.id}`, {
+            const response = await fetch(`${url}${arbolb.nodoActual.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -179,6 +182,9 @@ document.getElementById("crearpregunta").addEventListener("click", async functio
             //const data = await response.json();
             if (response.ok) {
                 console.log('El diagnóstico se ha eliminado.')
+                const modal = new bootstrap.Modal(document.getElementById('modalCrearPregunta'));
+                modal.hide();
+                return;
             } else {
                 alert('Error al modificar el diagnóstico.');
             }
@@ -190,7 +196,7 @@ document.getElementById("crearpregunta").addEventListener("click", async functio
     }
 
     try {
-        const response = await fetch(`${env}/api/arbol_desicion/`, {
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
