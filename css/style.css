@@ -1,0 +1,25 @@
+#resultado-area {
+    display: none; /* Inicialmente oculto */
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto; /* Ajusta el tamaño según sea necesario */
+    max-width: 100%; /* Evitar que se salga del contenedor */
+}
+
+#boton-si{
+    display: none;
+
+}
+
+#boton-no{
+    display: none;
+    
+}
+#pregunta{
+    display: none;
+    
+}
